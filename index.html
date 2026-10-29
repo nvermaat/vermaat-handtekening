@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vermaat Handtekening</title>
+<style>
+body{margin:0;background:#f5f3ee;color:#0c0c0c;font:15px/1.5 "Segoe UI",system-ui,Arial,sans-serif;padding:40px 16px}
+main{max-width:560px;margin:0 auto;background:#fff;border:1px solid #e4e1d6;border-radius:4px;padding:28px}
+h1{font-size:22px;margin:16px 0 6px}
+p{color:#55534c;margin:0 0 14px}
+ul{padding-left:18px;color:#55534c}
+.ok{color:#2f7d32;font-weight:600}
+.bad{color:#a63244;font-weight:600}
+code{font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <img src="assets/logo.png" width="200" height="34" alt="Nico Vermaat IT Consultancy">
+  <h1>Vermaat Handtekening</h1>
+  <p>Outlook invoegtoepassing voor de e-mailhandtekening van Nico Vermaat IT Consultancy.</p>
+  <p>Controle van de bestanden:</p>
+  <ul id="checks"></ul>
+  <p><a href="taskpane.html">Paneel openen</a> · <a href="manifest.xml">manifest.xml</a></p>
+</main>
+<script>
+var files=["manifest.xml","taskpane.html","commands.html","launchevent.js","signature.js","assets/logo.png","assets/phone.png","assets/mail.png","assets/icon-16.png","assets/icon-32.png","assets/icon-64.png","assets/icon-80.png","assets/icon-128.png"];
+var ul=document.getElementById("checks");
+files.forEach(function(f){
+  var li=document.createElement("li"); li.innerHTML="<code>"+f+"</code> ..."; ul.appendChild(li);
+  fetch(f,{cache:"no-store"}).then(function(r){
+    li.innerHTML="<code>"+f+"</code> "+(r.ok?'<span class="ok">OK</span>':'<span class="bad">ontbreekt ('+r.status+')</span>');
+  }).catch(function(){ li.innerHTML="<code>"+f+'</code> <span class="bad">niet bereikbaar</span>'; });
+});
+</script>
+</body>
+</html>
