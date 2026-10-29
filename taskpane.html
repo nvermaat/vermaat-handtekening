@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vermaat Handtekening</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<script src="signature.js"></script>
+<style>
+:root{--bg:#f5f3ee;--panel:#fff;--line:#e4e1d6;--ink:#0c0c0c;--muted:#55534c;--soft:#85826f;--blue:#006298;--blue-ink:#fff;--field:#faf9f5}
+@media (prefers-color-scheme:dark){:root{--bg:#131413;--panel:#1d1e1d;--line:#323330;--ink:#f1efe8;--muted:#b9b6ab;--soft:#8f8c7f;--blue:#4aa3d6;--blue-ink:#0c0c0c;--field:#252624;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+main{padding:14px 14px 96px;display:flex;flex-direction:column;gap:14px}
+.label{font:600 11px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:12px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.seg button{border:0;background:var(--field);color:var(--muted);font:500 12px/1.25 inherit;padding:8px 4px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--blue);color:var(--blue-ink)}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}
+.checks label,.row{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:13px}
+input[type=checkbox]{accent-color:var(--blue);margin:0}
+select,input[type=text],textarea{width:100%;font:14px inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:3px;padding:7px 9px}
+textarea{resize:vertical}
+details summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.fields{display:flex;flex-direction:column;gap:9px;margin-top:10px}
+.fields label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.preview{background:#fff;border:1px solid var(--line);border-radius:4px;padding:6px 12px 14px;overflow-x:auto;color:#222}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.btns{display:flex;gap:8px}
+.btns button{flex:1;border-radius:3px;padding:9px 10px;font:600 13px inherit;cursor:pointer;border:1px solid var(--blue)}
+.primary{background:var(--blue);color:var(--blue-ink)}
+.ghost{background:transparent;color:var(--blue)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.status{font-size:12px;color:var(--blue);min-height:16px}
+.hint{font-size:12px;color:var(--soft);margin:6px 0 0}
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="label">Versie in deze mail</div>
+    <div class="seg" id="seg" role="group" aria-label="Versie"></div>
+    <p class="hint" id="fromHint"></p>
+  </section>
+
+  <section class="card">
+    <div class="label">Tonen in deze versie</div>
+    <div class="checks" id="checks"></div>
+  </section>
+
+  <section>
+    <div class="label">Voorbeeld</div>
+    <div class="preview" id="preview"></div>
+  </section>
+
+  <section class="card">
+    <div class="label">Bij nieuwe mail</div>
+    <label class="row" style="margin-bottom:8px"><input type="checkbox" id="autoInsert"> Handtekening automatisch invoegen</label>
+    <select id="defaultVariant" aria-label="Standaardversie">
+      <option value="auto">Kies op basis van Van-adres</option>
+    </select>
+    <label class="row" style="margin-top:8px"><input type="checkbox" id="disableOutlookSig"> Eigen Outlook handtekening uitzetten</label>
+    <p class="hint">Op basis van Van-adres: @nicovermaat.nl krijgt Privé, @vermaat-it.nl krijgt Nico Vermaat IT Consultancy.</p>
+  </section>
+
+  <details class="card">
+    <summary>Gegevens aanpassen</summary>
+    <div class="fields" id="fields"></div>
+  </details>
+</main>
+
+<div class="bar">
+  <div class="btns">
+    <button class="primary" type="button" id="insert">Invoegen</button>
+    <button class="ghost" type="button" id="save">Opslaan als standaard</button>
+  </div>
+  <div class="status" id="status" role="status"></div>
+</div>
+
+<script>
+var CHECKS=[["logo","Woordmerk"],["role","Functie"],["slogan","Slogan"],["bizphone","Zakelijk tel."],["privphone","Privé tel."],["addr","Adres"],["web","Website"],["certs","Certificeringen"],["kvk","KVK nummer"],["footer","Bedrijfsnaam onderaan"]];
+var FIELDS=[["name","Naam"],["role","Functie"],["slogan","Slogan"],["bizphone","Zakelijk telefoonnummer"],["phone","Privé telefoonnummer"],["emailBiz","E-mail zakelijk"],["emailPriv","E-mail privé"],["address","Adres",true],["web","Website"],["kvk","KVK nummer"],["company","Bedrijfsnaam (Consultancy)"],["company2","Bedrijfsnaam (Vermaat IT)"],["activity","Activiteit"],["certs","Certificeringen"]];
+var settings=NVSig.load(null), variant="consultancy";
+function $(id){return document.getElementById(id);}
+function say(t){$("status").textContent=t;}
+
+function renderSeg(){
+  var seg=$("seg"); seg.innerHTML="";
+  NVSig.VARIANTS.forEach(function(v){
+    var b=document.createElement("button"); b.type="button"; b.textContent=v.label;
+    b.setAttribute("aria-pressed",String(v.id===variant));
+    b.onclick=function(){variant=v.id; renderAll();};
+    seg.appendChild(b);
+  });
+}
+function renderChecks(){
+  var box=$("checks"); box.innerHTML="";
+  var s=settings.show[variant];
+  CHECKS.forEach(function(c){
+    if(c[0]==="footer"&&variant==="prive") return;
+    var l=document.createElement("label"), i=document.createElement("input");
+    i.type="checkbox"; i.checked=!!s[c[0]]; i.id="chk-"+c[0];
+    i.onchange=function(){ s[c[0]]=i.checked; renderPreview(); };
+    l.appendChild(i); l.appendChild(document.createTextNode(c[1])); box.appendChild(l);
+  });
+}
+function renderFields(){
+  var box=$("fields"); box.innerHTML="";
+  FIELDS.forEach(function(f){
+    var l=document.createElement("label"), el=document.createElement(f[2]?"textarea":"input");
+    if(!f[2]) el.type="text"; else el.rows=2;
+    el.id="f-"+f[0]; el.value=settings.fields[f[0]]||"";
+    el.oninput=function(){ settings.fields[f[0]]=el.value; renderPreview(); };
+    l.appendChild(document.createTextNode(f[1])); l.appendChild(el); box.appendChild(l);
+  });
+}
+function renderPreview(){ $("preview").innerHTML=NVSig.build(variant,settings); }
+function renderAll(){ renderSeg(); renderChecks(); renderPreview(); }
+
+function initDefaults(){
+  var sel=$("defaultVariant");
+  NVSig.VARIANTS.forEach(function(v){ var o=document.createElement("option"); o.value=v.id; o.textContent="Altijd "+v.label; sel.appendChild(o); });
+  sel.value=settings.defaultVariant;
+  sel.onchange=function(){ settings.defaultVariant=sel.value; };
+  $("autoInsert").checked=settings.autoInsert;
+  $("autoInsert").onchange=function(){ settings.autoInsert=this.checked; };
+  $("disableOutlookSig").checked=settings.disableOutlookSig;
+  $("disableOutlookSig").onchange=function(){ settings.disableOutlookSig=this.checked; };
+}
+
+function insert(){
+  var item=Office.context.mailbox&&Office.context.mailbox.item;
+  if(!item||!item.body||!item.body.setSignatureAsync){ say("Invoegen werkt alleen in een mail die je aan het schrijven bent."); return; }
+  item.body.setSignatureAsync(NVSig.build(variant,settings),{coercionType:Office.CoercionType.Html},function(r){
+    say(r.status===Office.AsyncResultStatus.Succeeded?"Handtekening ingevoegd.":"Invoegen lukte niet: "+(r.error&&r.error.message||"onbekende fout"));
+  });
+}
+function saveSettings(){
+  NVSig.save(Office.context.roamingSettings,settings,function(r){
+    say(r.status===Office.AsyncResultStatus.Succeeded?"Opgeslagen. Nieuwe mails gebruiken deze instellingen.":"Opslaan lukte niet: "+(r.error&&r.error.message||"onbekende fout"));
+  });
+}
+
+function start(fromAddress){
+  variant=NVSig.pickVariant(settings,fromAddress);
+  if(fromAddress) $("fromHint").textContent="Van: "+fromAddress;
+  initDefaults(); renderFields(); renderAll();
+  $("insert").onclick=insert; $("save").onclick=saveSettings;
+}
+
+if(window.Office){
+  Office.onReady(function(){
+    settings=NVSig.load(Office.context.roamingSettings);
+    var item=Office.context.mailbox&&Office.context.mailbox.item;
+    if(item&&item.from&&item.from.getAsync){
+      item.from.getAsync(function(r){ start(r.status===Office.AsyncResultStatus.Succeeded&&r.value?r.value.emailAddress:""); });
+    } else start(Office.context.mailbox&&Office.context.mailbox.userProfile?Office.context.mailbox.userProfile.emailAddress:"");
+  });
+} else { start(""); }
+</script>
+</body>
+</html>
