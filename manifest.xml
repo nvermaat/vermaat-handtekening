@@ -5,7 +5,7 @@
            xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
            xsi:type="MailApp">
   <Id>ae9eca89-f7e4-4397-88b5-f4fc9c845672</Id>
-  <Version>1.0.2.0</Version>
+  <Version>1.0.3.0</Version>
   <ProviderName>Nico Vermaat IT Consultancy</ProviderName>
   <DefaultLocale>nl-NL</DefaultLocale>
   <DisplayName DefaultValue="Vermaat Handtekening"/>
@@ -27,7 +27,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://nvermaat.github.io/vermaat-handtekening/taskpane.html"/>
+        <SourceLocation DefaultValue="https://nvermaat.github.io/vermaat-handtekening/taskpane.html?v=1.0.3"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -80,8 +80,8 @@
         <bt:Image id="Icon.80" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/commands.html?v=1.0.3"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/taskpane.html?v=1.0.3"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="Group.Label" DefaultValue="Vermaat"/>
@@ -147,9 +147,9 @@
           <bt:Image id="Icon.80" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/assets/icon-80.png"/>
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="Commands.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/commands.html"/>
-          <bt:Url id="LaunchEvent.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/launchevent.js"/>
-          <bt:Url id="Taskpane.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/taskpane.html"/>
+          <bt:Url id="Commands.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/commands.html?v=1.0.3"/>
+          <bt:Url id="LaunchEvent.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/launchevent.js?v=1.0.3"/>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://nvermaat.github.io/vermaat-handtekening/taskpane.html?v=1.0.3"/>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="Group.Label" DefaultValue="Vermaat"/>

@@ -8,7 +8,7 @@ Voegt de Nico Vermaat e-mailhandtekening automatisch in bij elke nieuwe mail, en
 * **Versie op basis van Van-adres**
   * `@nicovermaat.nl` krijgt **Privé** (naam, privénummer, e-mail, adres)
   * `@vermaat-it.nl` krijgt **Nico Vermaat IT Consultancy** (logo, functie, slogan, zakelijk nummer, website, certificeringen, bedrijfsblok met KVK)
-  * Wissel je het Van-adres tijdens het schrijven, dan wisselt de handtekening mee.
+  * Wissel je het Van-adres tijdens het schrijven, dan wisselt de handtekening mee. Dat gebeurt altijd op basis van het nieuwe adres, ook als je in het paneel een vaste standaardversie hebt opgeslagen.
 * **Knop "Handtekening"** in het lint van een nieuwe mail. Die opent een paneel waarin je:
   * de versie kiest: Privé, Nico Vermaat IT Consultancy of Nico Vermaat IT
   * per versie onderdelen aan of uit zet (woordmerk, functie, slogan, telefoonnummers, adres, website, certificeringen, KVK, bedrijfsnaam onderaan)
@@ -88,5 +88,6 @@ Open een nieuwe mail vanuit `info@vermaat-it.nl`: de zakelijke handtekening vers
 ## Problemen oplossen
 
 * **Geen handtekening bij nieuwe mail:** controleer of `commands.html` en `launchevent.js` bereikbaar zijn op je adres en of **Handtekening automatisch invoegen** in het paneel aan staat.
+* **Handtekening wisselt niet mee bij een ander Van-adres:** installeer `manifest.xml` opnieuw (verwijder de oude via https://aka.ms/olksideload, voeg daarna de nieuwe toe uit bestand) en sluit nieuwe Outlook helemaal af. Een geüploade manifest wordt niet automatisch bijgewerkt. Is het andere adres een apart account in plaats van een alias, dan moet de invoegtoepassing ook bij dat account geïnstalleerd zijn.
 * **Dubbele handtekening:** zet in het paneel **Eigen Outlook handtekening uitzetten** aan, of verwijder de standaardhandtekening in de Outlook instellingen.
 * **Logo niet zichtbaar bij ontvanger:** sommige mailprogramma's laden afbeeldingen pas na een klik. Het adres moet online blijven.
