@@ -5,7 +5,7 @@
            xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
            xsi:type="MailApp">
   <Id>ae9eca89-f7e4-4397-88b5-f4fc9c845672</Id>
-  <Version>1.0.1.0</Version>
+  <Version>1.0.2.0</Version>
   <ProviderName>Nico Vermaat IT Consultancy</ProviderName>
   <DefaultLocale>nl-NL</DefaultLocale>
   <DisplayName DefaultValue="Vermaat Handtekening"/>

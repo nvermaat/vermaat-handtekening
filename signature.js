@@ -31,6 +31,14 @@ var NVSig = (function () {
       prive:       { logo: false, role: false, slogan: false, bizphone: false, privphone: true,  addr: true,  web: false, certs: false, kvk: false, footer: false },
       consultancy: { logo: true,  role: true,  slogan: true,  bizphone: true,  privphone: false, addr: false, web: true,  certs: true,  kvk: true,  footer: true },
       it:          { logo: true,  role: true,  slogan: true,  bizphone: true,  privphone: false, addr: false, web: true,  certs: true,  kvk: true,  footer: true }
+    },
+    // Platte tekstversie voor supportformulieren: geen logo, kleuren, iconen of slogan.
+    support: {
+      email: "info@nicovermaat.nl", // apart te kiezen, los van de versie
+      english: false,               // Engelse labels
+      oneLine: false,               // alles op een regel voor korte velden
+      greeting: true,               // groet erboven
+      kvk: false
     }
   };
 
@@ -141,7 +149,37 @@ var NVSig = (function () {
     return h;
   }
 
-  return { HOST: HOST, DEFAULTS: DEFAULTS, VARIANTS: VARIANTS, load: load, save: save, merge: merge, pickVariant: pickVariant, build: build };
+  // Platte tekst voor supportformulieren. Naam en bedrijf volgen de versie, het e-mailadres staat apart.
+  function buildSupport(variant, settings) {
+    var f = settings.fields, o = settings.support || DEFAULTS.support, s = settings.show[variant] || settings.show.consultancy;
+    var biz = variant !== "prive";
+    var T = o.english
+      ? { tel: "Phone", mail: "Email", web: "Web", kvk: "Chamber of Commerce", greet: "Kind regards," }
+      : { tel: "Tel", mail: "E-mail", web: "Web", kvk: "KVK", greet: "Met vriendelijke groet," };
+    var head = [trim(f.name)];
+    if (s.role && trim(f.role)) head.push(trim(f.role));
+    var co = biz ? trim(variant === "it" ? f.company2 : f.company) : "";
+    if (co) head.push(co);
+    var phone = biz ? (trim(f.bizphone) || trim(f.phone)) : (trim(f.phone) || trim(f.bizphone));
+    var facts = [];
+    if (phone) facts.push(T.tel + ": " + phone);
+    if (trim(o.email)) facts.push(T.mail + ": " + trim(o.email));
+    if (biz && trim(f.web)) facts.push(T.web + ": " + trim(f.web));
+    if (o.kvk && trim(f.kvk)) facts.push(T.kvk + ": " + trim(f.kvk));
+    var out;
+    if (o.oneLine) {
+      var parts = [];
+      if (head.length) parts.push(head.join(", "));
+      if (facts.length) parts.push(facts.join(" | "));
+      out = parts.join(" | ");
+    } else {
+      out = head.concat(facts).join("\n");
+    }
+    if (o.greeting) out = T.greet + "\n\n" + out;
+    return out;
+  }
+
+  return { HOST: HOST, buildSupport: buildSupport, DEFAULTS: DEFAULTS, VARIANTS: VARIANTS, load: load, save: save, merge: merge, pickVariant: pickVariant, build: build };
 })();
 
 if (typeof module !== "undefined" && module.exports) module.exports = NVSig;

@@ -15,6 +15,7 @@ Voegt de Nico Vermaat e-mailhandtekening automatisch in bij elke nieuwe mail, en
   * je gegevens aanpast
   * met **Invoegen** de handtekening in de huidige mail zet
   * met **Opslaan als standaard** je keuzes bewaart voor alle volgende mails. Ze worden per mailbox opgeslagen en werken op elk apparaat waar de invoegtoepassing staat.
+* **Supportformulier**: in het paneel staat een platte tekstversie om in een webformulier van een leverancier te plakken. Zonder logo, kleuren of iconen. Je kiest apart welk e-mailadres erin staat (standaard privé, info@nicovermaat.nl), Engelse labels, alles op één regel, de groet en het KVK nummer. Met **Opslaan als standaard** worden ook deze keuzes bewaard.
 * Zet je eigen Outlook handtekening uit in mails waar hij invoegt, zodat je geen dubbele handtekening krijgt. Dit kun je in het paneel uitschakelen.
 
 ## Werkt in

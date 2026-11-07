@@ -34,6 +34,8 @@ details summary{cursor:pointer;font-weight:600;color:var(--ink)}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .status{font-size:12px;color:var(--blue);min-height:16px}
 .hint{font-size:12px;color:var(--soft);margin:6px 0 0}
+.sfout{width:100%;min-height:150px;font:12px/1.5 Consolas,"Courier New",monospace;white-space:pre;margin-top:10px}
+.sfbtn{margin-top:8px;width:100%;border-radius:3px;padding:8px 10px;font:600 13px inherit;cursor:pointer;border:1px solid var(--blue);background:transparent;color:var(--blue)}
 </style>
 </head>
 <body>
@@ -63,6 +65,28 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
     <label class="row" style="margin-top:8px"><input type="checkbox" id="disableOutlookSig"> Eigen Outlook handtekening uitzetten</label>
     <p class="hint">Op basis van Van-adres: @nicovermaat.nl krijgt Privé, @vermaat-it.nl krijgt Nico Vermaat IT Consultancy.</p>
   </section>
+
+  <details class="card" id="sfcard">
+    <summary>Supportformulier</summary>
+    <p class="hint">Platte tekst om in een webformulier van een leverancier te plakken. Geen logo, kleuren of iconen. Naam en bedrijf volgen de versie hierboven.</p>
+    <div class="fields">
+      <label>E-mail in supportformulier
+        <select id="sfMail">
+          <option value="info@nicovermaat.nl">Privé: info@nicovermaat.nl</option>
+          <option value="nico@vermaat-it.nl">Zakelijk persoonlijk: nico@vermaat-it.nl</option>
+          <option value="info@vermaat-it.nl">Zakelijk algemeen: info@vermaat-it.nl</option>
+        </select>
+      </label>
+    </div>
+    <div class="checks" style="margin-top:10px">
+      <label><input type="checkbox" id="sfEN"> Engelse labels</label>
+      <label><input type="checkbox" id="sfOne"> Op één regel</label>
+      <label><input type="checkbox" id="sfGreet"> Met groet erboven</label>
+      <label><input type="checkbox" id="sfKvk"> KVK nummer</label>
+    </div>
+    <textarea class="sfout" id="sfPreview" readonly aria-label="Tekst voor supportformulier"></textarea>
+    <button class="sfbtn" type="button" id="sfCopy">Kopieer voor supportformulier</button>
+  </details>
 
   <details class="card">
     <summary>Gegevens aanpassen</summary>
@@ -115,7 +139,22 @@ function renderFields(){
     l.appendChild(document.createTextNode(f[1])); l.appendChild(el); box.appendChild(l);
   });
 }
-function renderPreview(){ $("preview").innerHTML=NVSig.build(variant,settings); }
+function renderPreview(){ $("preview").innerHTML=NVSig.build(variant,settings); renderSupport(); }
+function renderSupport(){ if($("sfPreview")) $("sfPreview").value=NVSig.buildSupport(variant,settings); }
+function initSupport(){
+  var o=settings.support;
+  $("sfMail").value=o.email; $("sfEN").checked=o.english; $("sfOne").checked=o.oneLine; $("sfGreet").checked=o.greeting; $("sfKvk").checked=o.kvk;
+  $("sfMail").onchange=function(){ o.email=this.value; renderSupport(); };
+  $("sfEN").onchange=function(){ o.english=this.checked; renderSupport(); };
+  $("sfOne").onchange=function(){ o.oneLine=this.checked; renderSupport(); };
+  $("sfGreet").onchange=function(){ o.greeting=this.checked; renderSupport(); };
+  $("sfKvk").onchange=function(){ o.kvk=this.checked; renderSupport(); };
+  $("sfCopy").onclick=function(){
+    var ta=$("sfPreview"), txt=ta.value;
+    var fallback=function(){ ta.focus(); ta.select(); var ok=false; try{ ok=document.execCommand("copy"); }catch(e){} say(ok?"Supportformulier tekst gekopieerd.":"Tekst is geselecteerd. Druk op Ctrl+C om te kopiëren."); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ say("Supportformulier tekst gekopieerd."); },fallback); } else fallback();
+  };
+}
 function renderAll(){ renderSeg(); renderChecks(); renderPreview(); }
 
 function initDefaults(){
@@ -145,7 +184,7 @@ function saveSettings(){
 function start(fromAddress){
   variant=NVSig.pickVariant(settings,fromAddress);
   if(fromAddress) $("fromHint").textContent="Van: "+fromAddress;
-  initDefaults(); renderFields(); renderAll();
+  initDefaults(); initSupport(); renderFields(); renderAll();
   $("insert").onclick=insert; $("save").onclick=saveSettings;
 }
 
