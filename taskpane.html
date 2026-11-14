@@ -54,6 +54,8 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
   <section>
     <div class="label">Voorbeeld</div>
     <div class="preview" id="preview"></div>
+    <button class="sfbtn" type="button" id="copySig">Kopieer handtekening</button>
+    <p class="hint">Kopieert de opgemaakte handtekening met logo en iconen. Plak hem direct in een mail, Word of een ander programma.</p>
   </section>
 
   <section class="card">
@@ -155,6 +157,18 @@ function initSupport(){
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ say("Supportformulier tekst gekopieerd."); },fallback); } else fallback();
   };
 }
+function copySig(){
+  var html=NVSig.build(variant,settings), box=$("preview"), text=(box.innerText||box.textContent||"").replace(/\n{3,}/g,"\n\n").trim();
+  var done=function(){ say("Handtekening gekopieerd. Plak hem waar je hem nodig hebt."); };
+  var fallback=function(){
+    var ok=false, sel=window.getSelection(), r=document.createRange();
+    try{ r.selectNodeContents(box); sel.removeAllRanges(); sel.addRange(r); ok=document.execCommand("copy"); }catch(e){}
+    if(ok){ sel.removeAllRanges(); done(); } else say("Handtekening is geselecteerd. Druk op Ctrl+C om te kopiëren.");
+  };
+  if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
+    navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([html],{type:"text/html"}),"text/plain":new Blob([text],{type:"text/plain"})})]).then(done,fallback);
+  } else fallback();
+}
 function renderAll(){ renderSeg(); renderChecks(); renderPreview(); }
 
 function initDefaults(){
@@ -185,7 +199,7 @@ function start(fromAddress){
   variant=NVSig.pickVariant(settings,fromAddress);
   if(fromAddress) $("fromHint").textContent="Van: "+fromAddress;
   initDefaults(); initSupport(); renderFields(); renderAll();
-  $("insert").onclick=insert; $("save").onclick=saveSettings;
+  $("insert").onclick=insert; $("copySig").onclick=copySig; $("save").onclick=saveSettings;
 }
 
 if(window.Office){
