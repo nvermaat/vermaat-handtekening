@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Vermaat Handtekening</title>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
-<script src="signature.js?v=1.0.4"></script>
+<script src="signature.js?v=1.0.5"></script>
 <style>
 :root{--bg:#f5f3ee;--panel:#fff;--line:#e4e1d6;--ink:#0c0c0c;--muted:#55534c;--soft:#85826f;--blue:#006298;--blue-ink:#fff;--field:#faf9f5}
 @media (prefers-color-scheme:dark){:root{--bg:#131413;--panel:#1d1e1d;--line:#323330;--ink:#f1efe8;--muted:#b9b6ab;--soft:#8f8c7f;--blue:#4aa3d6;--blue-ink:#0c0c0c;--field:#252624;color-scheme:dark}}
@@ -105,8 +105,8 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 </div>
 
 <script>
-var CHECKS=[["logo","Woordmerk"],["role","Functie"],["slogan","Slogan"],["bizphone","Zakelijk tel."],["privphone","Privé tel."],["addr","Adres"],["web","Website"],["certs","Certificeringen"],["kvk","KVK nummer"],["footer","Bedrijfsnaam onderaan"]];
-var FIELDS=[["name","Naam"],["role","Functie"],["slogan","Slogan"],["bizphone","Zakelijk telefoonnummer"],["phone","Privé telefoonnummer"],["emailBiz","E-mail zakelijk"],["emailPriv","E-mail privé"],["address","Adres",true],["web","Website"],["kvk","KVK nummer"],["company","Bedrijfsnaam (Consultancy)"],["company2","Bedrijfsnaam (Vermaat IT)"],["activity","Activiteit"],["certs","Certificeringen"]];
+var CHECKS=[["greet","Groet"],["logo","Woordmerk"],["role","Functie"],["slogan","Slogan"],["bizphone","Zakelijk tel."],["privphone","Privé tel."],["addr","Adres"],["web","Website"],["certs","Certificeringen"],["kvk","KVK nummer"],["footer","Bedrijfsnaam onderaan"]];
+var FIELDS=[["greeting","Groet"],["name","Naam"],["role","Functie"],["slogan","Slogan"],["bizphone","Zakelijk telefoonnummer"],["phone","Privé telefoonnummer"],["emailBiz","E-mail zakelijk"],["emailPriv","E-mail privé"],["address","Adres",true],["web","Website"],["kvk","KVK nummer"],["company","Bedrijfsnaam (Consultancy)"],["company2","Bedrijfsnaam (Vermaat IT)"],["activity","Activiteit"],["certs","Certificeringen"]];
 var settings=NVSig.load(null), variant="consultancy";
 function $(id){return document.getElementById(id);}
 function say(t){$("status").textContent=t;}

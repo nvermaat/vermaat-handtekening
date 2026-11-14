@@ -11,7 +11,7 @@ Voegt de Nico Vermaat e-mailhandtekening automatisch in bij elke nieuwe mail, en
   * Wissel je het Van-adres tijdens het schrijven, dan wisselt de handtekening mee. Dat gebeurt altijd op basis van het nieuwe adres, ook als je in het paneel een vaste standaardversie hebt opgeslagen.
 * **Knop "Handtekening"** in het lint van een nieuwe mail. Die opent een paneel waarin je:
   * de versie kiest: Privé, Nico Vermaat IT Consultancy of Nico Vermaat IT
-  * per versie onderdelen aan of uit zet (woordmerk, functie, slogan, telefoonnummers, adres, website, certificeringen, KVK, bedrijfsnaam onderaan)
+  * per versie onderdelen aan of uit zet (groet, woordmerk, functie, slogan, telefoonnummers, adres, website, certificeringen, KVK, bedrijfsnaam onderaan)
   * je gegevens aanpast
   * met **Invoegen** de handtekening in de huidige mail zet
   * met **Opslaan als standaard** je keuzes bewaart voor alle volgende mails. Ze worden per mailbox opgeslagen en werken op elk apparaat waar de invoegtoepassing staat.

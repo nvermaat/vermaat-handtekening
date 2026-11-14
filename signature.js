@@ -12,6 +12,7 @@ var NVSig = (function () {
     disableOutlookSig: true,   // eigen Outlook handtekening uitzetten, voorkomt dubbele handtekening
     defaultVariant: "auto",    // auto | prive | consultancy | it
     fields: {
+      greeting: "Met vriendelijke groet / Kind regards,",
       name: "Nico Vermaat",
       role: "Senior IT Consultant",
       slogan: "Vermaat IT: inzichtelijk, stabiel, opgeleverd.",
@@ -28,9 +29,9 @@ var NVSig = (function () {
       certs: "MCSE · VCP DCV · VCP DTM · CCE"
     },
     show: {
-      prive:       { logo: false, role: false, slogan: false, bizphone: false, privphone: true,  addr: true,  web: false, certs: false, kvk: false, footer: false },
-      consultancy: { logo: true,  role: true,  slogan: false,  bizphone: true,  privphone: false, addr: false, web: true,  certs: false,  kvk: true,  footer: true },
-      it:          { logo: true,  role: true,  slogan: false,  bizphone: true,  privphone: false, addr: false, web: true,  certs: false,  kvk: true,  footer: true }
+      prive:       { greet: true,  logo: false, role: false, slogan: false, bizphone: false, privphone: true,  addr: true,  web: false, certs: false, kvk: false, footer: false },
+      consultancy: { greet: true,  logo: true,  role: true,  slogan: false,  bizphone: true,  privphone: false, addr: false, web: true,  certs: false,  kvk: true,  footer: true },
+      it:          { greet: true,  logo: true,  role: true,  slogan: false,  bizphone: true,  privphone: false, addr: false, web: true,  certs: false,  kvk: true,  footer: true }
     },
     // Platte tekstversie voor supportformulieren: geen logo, kleuren, iconen of slogan.
     support: {
@@ -109,6 +110,7 @@ var NVSig = (function () {
     var lbl = phones.length > 1;
 
     var h = '<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;' + F + 'color:#0c0c0c;margin-top:14px;">';
+    if (s.greet && trim(f.greeting)) h += '<tr><td style="padding:0 0 14px 0;' + F + 'font-size:14px;color:#0c0c0c;line-height:20px;">' + esc(trim(f.greeting)) + "</td></tr>";
     if (s.logo) h += '<tr><td style="padding:0 0 14px 0;"><img src="' + HOST + '/assets/logo.png" width="200" height="34" alt="Nico Vermaat IT Consultancy" style="display:block;border:0;width:200px;height:34px;"></td></tr>';
     h += '<tr><td style="border-left:3px solid #006298;padding:2px 0 2px 12px;">';
     h += '<div style="' + F + 'font-size:15px;font-weight:bold;color:#0c0c0c;line-height:20px;">' + esc(trim(f.name)) + "</div>";
