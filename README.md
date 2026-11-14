@@ -7,7 +7,7 @@ Voegt de Nico Vermaat e-mailhandtekening automatisch in bij elke nieuwe mail, en
 * **Automatisch invoegen** bij een nieuwe mail, een antwoord of een doorgestuurd bericht.
 * **Versie op basis van Van-adres**
   * `@nicovermaat.nl` krijgt **Privé** (naam, privénummer, e-mail, adres)
-  * `@vermaat-it.nl` krijgt **Nico Vermaat IT Consultancy** (logo, functie, slogan, zakelijk nummer, website, certificeringen, bedrijfsblok met KVK)
+  * `@vermaat-it.nl` krijgt **Nico Vermaat IT Consultancy** (logo, functie, zakelijk nummer, website, bedrijfsblok met KVK; slogan en certificeringen staan standaard uit)
   * Wissel je het Van-adres tijdens het schrijven, dan wisselt de handtekening mee. Dat gebeurt altijd op basis van het nieuwe adres, ook als je in het paneel een vaste standaardversie hebt opgeslagen.
 * **Knop "Handtekening"** in het lint van een nieuwe mail. Die opent een paneel waarin je:
   * de versie kiest: Privé, Nico Vermaat IT Consultancy of Nico Vermaat IT

@@ -29,8 +29,8 @@ var NVSig = (function () {
     },
     show: {
       prive:       { logo: false, role: false, slogan: false, bizphone: false, privphone: true,  addr: true,  web: false, certs: false, kvk: false, footer: false },
-      consultancy: { logo: true,  role: true,  slogan: true,  bizphone: true,  privphone: false, addr: false, web: true,  certs: true,  kvk: true,  footer: true },
-      it:          { logo: true,  role: true,  slogan: true,  bizphone: true,  privphone: false, addr: false, web: true,  certs: true,  kvk: true,  footer: true }
+      consultancy: { logo: true,  role: true,  slogan: false,  bizphone: true,  privphone: false, addr: false, web: true,  certs: false,  kvk: true,  footer: true },
+      it:          { logo: true,  role: true,  slogan: false,  bizphone: true,  privphone: false, addr: false, web: true,  certs: false,  kvk: true,  footer: true }
     },
     // Platte tekstversie voor supportformulieren: geen logo, kleuren, iconen of slogan.
     support: {
