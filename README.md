@@ -17,6 +17,7 @@ Voegt de Nico Vermaat e-mailhandtekening automatisch in bij elke nieuwe mail, en
   * met **Opslaan als standaard** je keuzes bewaart voor alle volgende mails. Ze worden per mailbox opgeslagen en werken op elk apparaat waar de invoegtoepassing staat.
 * **Kopieer handtekening**: onder het voorbeeld staat een knop die de opgemaakte handtekening (met logo en iconen) direct naar het klembord kopieert. Plak hem in een mail, Word of een ander programma. Werkt ook als je `taskpane.html` gewoon in de browser opent.
 * **Supportformulier**: in het paneel staat een platte tekstversie om in een webformulier van een leverancier te plakken. Zonder logo, kleuren of iconen. Je kiest apart welk e-mailadres erin staat (standaard privé, info@nicovermaat.nl), Engelse labels, alles op één regel, de groet en het KVK nummer. Met **Opslaan als standaard** worden ook deze keuzes bewaard.
+* **Sjablonen**: in hetzelfde paneel staat een tab **Sjablonen**. Kies een sjabloon, vul de velden in en klik op **Invoegen**. Het sjabloon komt op de plek van je cursor, boven je handtekening, en het onderwerp wordt ingevuld. Sjablonen staan als HTML bestanden in de map `templates`; hoe je er een toevoegt staat in `templates/README.md`.
 * Zet je eigen Outlook handtekening uit in mails waar hij invoegt, zodat je geen dubbele handtekening krijgt. Dit kun je in het paneel uitschakelen.
 
 ## Werkt in
@@ -39,6 +40,8 @@ Vereist een Microsoft 365 of Exchange Online mailbox.
 | `commands.html` | Laadt het automatisch invoegen in Outlook op het web en nieuwe Outlook |
 | `launchevent.js` | Automatisch invoegen, ook voor klassiek Outlook |
 | `signature.js` | De handtekening zelf, gedeeld door alle onderdelen |
+| `templates.js` | De tab Sjablonen in het paneel |
+| `templates/` | De sjablonen (`index.json` plus een HTML bestand per sjabloon) |
 | `assets/` | Logo, iconen voor telefoon en e-mail, knopiconen |
 | `set-host.ps1`, `set-host.sh` | Zet je webadres in de bestanden |
 

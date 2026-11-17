@@ -1,0 +1,23 @@
+[
+  {
+    "id": "opvolging",
+    "title": "Opvolging na gesprek",
+    "desc": "Bedankt voor het gesprek, samenvatting en volgende stap.",
+    "subject": "Opvolging van ons gesprek",
+    "file": "opvolging.html"
+  },
+  {
+    "id": "urenstaat",
+    "title": "Urenstaat ter goedkeuring",
+    "desc": "Urenstaat sturen en om goedkeuring vragen voor de factuur.",
+    "subject": "Urenstaat {{Periode}} ter goedkeuring",
+    "file": "urenstaat.html"
+  },
+  {
+    "id": "opdracht",
+    "title": "Reactie op opdracht",
+    "desc": "Interesse en beschikbaarheid voor een nieuwe opdracht.",
+    "subject": "Reactie op opdracht {{Opdracht}}",
+    "file": "opdracht.html"
+  }
+]

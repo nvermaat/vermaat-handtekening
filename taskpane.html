@@ -6,10 +6,12 @@
 <title>Vermaat Handtekening</title>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 <script src="signature.js?v=1.0.5"></script>
+<script src="templates.js?v=1.0.6"></script>
 <style>
 :root{--bg:#f5f3ee;--panel:#fff;--line:#e4e1d6;--ink:#0c0c0c;--muted:#55534c;--soft:#85826f;--blue:#006298;--blue-ink:#fff;--field:#faf9f5}
 @media (prefers-color-scheme:dark){:root{--bg:#131413;--panel:#1d1e1d;--line:#323330;--ink:#f1efe8;--muted:#b9b6ab;--soft:#8f8c7f;--blue:#4aa3d6;--blue-ink:#0c0c0c;--field:#252624;color-scheme:dark}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Arial,sans-serif}
 main{padding:14px 14px 96px;display:flex;flex-direction:column;gap:14px}
 .label{font:600 11px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:8px}
@@ -35,11 +37,25 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .status{font-size:12px;color:var(--blue);min-height:16px}
 .hint{font-size:12px;color:var(--soft);margin:6px 0 0}
 .sfout{width:100%;min-height:150px;font:12px/1.5 Consolas,"Courier New",monospace;white-space:pre;margin-top:10px}
+.tabs{position:sticky;top:0;z-index:2;display:grid;grid-template-columns:1fr 1fr;background:var(--panel);border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:transparent;color:var(--muted);font:600 13px inherit;padding:11px 6px;cursor:pointer;border-bottom:2px solid transparent}
+.tabs button[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue)}
+.tpls{display:flex;flex-direction:column;gap:8px}
+.tpl{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px;cursor:pointer;color:var(--ink);font:inherit}
+.tpl span{font-size:12px;color:var(--muted)}
+.tpl.on{border-color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}
+.subj{font-size:12px;color:var(--muted);margin:0 0 8px}
+.subj b{color:var(--ink)}
+.preview p{margin:0 0 10px}
 .sfbtn{margin-top:8px;width:100%;border-radius:3px;padding:8px 10px;font:600 13px inherit;cursor:pointer;border:1px solid var(--blue);background:transparent;color:var(--blue)}
 </style>
 </head>
 <body>
-<main>
+<nav class="tabs" role="tablist">
+  <button type="button" role="tab" id="tabBtnSig" aria-selected="true" aria-controls="tabSig">Handtekening</button>
+  <button type="button" role="tab" id="tabBtnTpl" aria-selected="false" aria-controls="tabTpl">Sjablonen</button>
+</nav>
+<main id="tabSig" role="tabpanel">
   <section>
     <div class="label">Versie in deze mail</div>
     <div class="seg" id="seg" role="group" aria-label="Versie"></div>
@@ -96,7 +112,34 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
   </details>
 </main>
 
-<div class="bar">
+<main id="tabTpl" role="tabpanel" hidden>
+  <section>
+    <div class="label">Kies een sjabloon</div>
+    <div class="tpls" id="tplList"><p class="hint">Laden...</p></div>
+  </section>
+  <div id="tplDetail" hidden style="display:contents">
+    <section class="card" id="tplFieldsCard">
+      <div class="label">Invullen</div>
+      <div class="fields" id="tplFields" style="margin-top:0"></div>
+    </section>
+    <section>
+      <div class="label">Voorbeeld</div>
+      <div class="preview">
+        <p class="subj">Onderwerp: <b id="tplSubject"></b></p>
+        <div id="tplPreview"></div>
+      </div>
+      <label class="row" style="margin-top:10px"><input type="checkbox" id="tplSetSubject" checked> Onderwerp ook invullen</label>
+      <div class="btns" style="margin-top:10px">
+        <button class="primary" type="button" id="tplInsert">Invoegen</button>
+        <button class="ghost" type="button" id="tplCopy">Kopieer</button>
+      </div>
+      <p class="hint">Invoegen zet het sjabloon op de plek van je cursor, boven je handtekening. Lege velden blijven als [Veld] staan.</p>
+    </section>
+  </div>
+  <div class="status" id="tplStatus" role="status"></div>
+</main>
+
+<div class="bar" id="sigBar">
   <div class="btns">
     <button class="primary" type="button" id="insert">Invoegen</button>
     <button class="ghost" type="button" id="save">Opslaan als standaard</button>
@@ -194,6 +237,15 @@ function saveSettings(){
     say(r.status===Office.AsyncResultStatus.Succeeded?"Opgeslagen. Nieuwe mails gebruiken deze instellingen.":"Opslaan lukte niet: "+(r.error&&r.error.message||"onbekende fout"));
   });
 }
+
+function showTab(tpl){
+  $("tabSig").hidden=tpl; $("sigBar").hidden=tpl; $("tabTpl").hidden=!tpl;
+  $("tabBtnSig").setAttribute("aria-selected",String(!tpl)); $("tabBtnTpl").setAttribute("aria-selected",String(tpl));
+  if(tpl&&!showTab.loaded){ showTab.loaded=true; NVTpl.init(); }
+}
+$("tabBtnSig").onclick=function(){ showTab(false); };
+$("tabBtnTpl").onclick=function(){ showTab(true); };
+if(/[?&#]tab=sjablonen/.test(location.href)) showTab(true);
 
 function start(fromAddress){
   variant=NVSig.pickVariant(settings,fromAddress);
